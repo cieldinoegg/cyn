@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart'; // 권한
 import 'package:webview_flutter/webview_flutter.dart'; // 웹뷰
 import 'package:app_settings/app_settings.dart'; // ios 설정
-import 'package:flutter_local_notifications/flutter_local_notifications.dart'; // 알림
+import 'notification.dart'; // 알림
+
 
 void main() {
   runApp(MyApp());
@@ -62,8 +63,6 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-var Link = 'https://blog.naver.com/cieldinoegg';
-
 class WebViewExample extends StatefulWidget {
   const WebViewExample({Key? key}) : super(key: key);
 
@@ -73,6 +72,14 @@ class WebViewExample extends StatefulWidget {
 
 class WebViewExampleState extends State<WebViewExample> {
   WebViewController? _webViewController;
+  final Completer<WebViewController> _completerController = Completer<WebViewController>();
+
+
+  updateUrl(String Link) {
+    setState(() {
+      _webViewController?.loadUrl(Link);
+    });
+  }
 
   @override
   void initState() {
@@ -85,13 +92,24 @@ class WebViewExampleState extends State<WebViewExample> {
 
   @override
   Widget build(BuildContext context) {
-    showNotification();
     return WillPopScope(
       onWillPop: () => _goBack(context),
       child: Scaffold(
         body: WebView(
-          initialUrl: Link,
+          onWebViewCreated: (WebViewController webViewController) {
+            _completerController.future
+                .then((value) => _webViewController = value);
+            _completerController.complete(webViewController);
+          },
+          initialUrl: "https://blog.naver.com/cieldinoegg/222611323546",
           javascriptMode: JavascriptMode.unrestricted,
+        ),
+        floatingActionButton: FloatingActionButton(
+          // child: Text('Click'),
+          child: Icon(Icons.access_alarm),
+          onPressed: ()=> {
+            showNotification()
+          },
         ),
       ),
     );
@@ -108,61 +126,4 @@ class WebViewExampleState extends State<WebViewExample> {
       return Future.value(true);
     }
   }
-}
-
-final notifications = FlutterLocalNotificationsPlugin();
-
-// 앱로드시 실행할 기본설정
-initNotification() async {
-  // 안드로이드용 아이콘파일 이름
-  var androidSetting = AndroidInitializationSettings('app_icon');
-  // ios 앱 로드시 유저에게 권한요청
-  var iosSetting = IOSInitializationSettings(
-    requestAlertPermission: true,
-    requestBadgePermission: true,
-    requestSoundPermission: true,
-  );
-
-  var initializationSettings =
-      InitializationSettings(android: androidSetting, iOS: iosSetting);
-
-  await notifications.initialize(
-      initializationSettings,
-      // 알림 누를때 온 페이지로 이동
-      onSelectNotification: (String? payload) async {
-    //onSelectNotification은 알림을 선택했을때 발생
-    if (payload != null) {
-      Link = noticeLink;
-      WebViewExampleState();
-    }
-  });
-}
-
-var noticeLink;
-
-showNotification() async {
-  var androidDetails = AndroidNotificationDetails(
-    '유니크한 알림 채널 ID',
-    '알림종류 설명',
-    priority: Priority.high,
-    importance: Importance.max,
-    color: Color.fromARGB(255, 255, 0, 0),
-  );
-
-  var iosDetails = IOSNotificationDetails(
-    presentAlert: true,
-    presentBadge: true,
-    presentSound: true,
-  );
-
-  // 서버에서 알림이 오면 정보 받기
-  String noticeName = '제목';
-  String noticeInform = '내용';
-  noticeLink = 'https://blog.naver.com/cieldinoegg/222611323546';
-
-  // 알림 id, 제목, 내용 맘대로 채우기
-  notifications.show(1, noticeName, noticeInform,
-      NotificationDetails(android: androidDetails, iOS: iosDetails),
-      payload: noticeLink // 부가정보
-      );
 }
