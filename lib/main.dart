@@ -55,13 +55,18 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'MY APP',
+      title: 'Nearby News',
+      theme: ThemeData(
+
+      ),
       home: Scaffold(
         body: Center(child: WebViewExample()),
       ),
     );
   }
 }
+
+dynamic url;
 
 class WebViewExample extends StatefulWidget {
   const WebViewExample({Key? key}) : super(key: key);
@@ -74,10 +79,9 @@ class WebViewExampleState extends State<WebViewExample> {
   WebViewController? _webViewController;
   final Completer<WebViewController> _completerController = Completer<WebViewController>();
 
-
-  updateUrl(String Link) {
+  updateUrl() {
     setState(() {
-      _webViewController?.loadUrl(Link);
+      _webViewController?.loadUrl(url);
     });
   }
 
@@ -108,7 +112,8 @@ class WebViewExampleState extends State<WebViewExample> {
           // child: Text('Click'),
           child: Icon(Icons.access_alarm),
           onPressed: ()=> {
-            showNotification()
+            showNotification(),
+            updateUrl()
           },
         ),
       ),
