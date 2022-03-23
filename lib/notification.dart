@@ -47,12 +47,12 @@ showNotification() async {
     presentSound: true,
   );
 
-  // 서버에서 알림이 오면 정보 받기
+  // 알림 정보
   String noticeName = 'N.B.N';
   String noticeInform = '우리 동네에 일어난 일을 확인해 보세요';
-  String noticeLink = 'https://velog.io/@gwd0311/Flutter-%ED%91%B8%EC%8B%9C%EC%95%8C%EB%A6%BC-%EA%B5%AC%ED%98%84';
+  String noticeLink = '이동할 링크';
 
-  // 알림 id, 제목, 내용 맘대로 채우기
+  // 알림 id, 제목, 내용
   notifications.show(
       groupedNotificationCounter,
       noticeName,
@@ -61,30 +61,12 @@ showNotification() async {
       payload: noticeLink // 부가정보
   );
   groupedNotificationCounter++;
-}
-
-
-showNotification2() async { // 매일 7시 알림
-  tz.initializeTimeZones();
-  var androidDetails = const AndroidNotificationDetails(
-    'ID',
-    '매일 오는 확인 알림',
-    priority: Priority.high,
-    importance: Importance.max,
-    color: Color.fromARGB(255, 255, 0, 0),
-  );
-
-  var iosDetails = const IOSNotificationDetails(
-    presentAlert: true,
-    presentBadge: true,
-    presentSound: true,
-  );
 
   notifications.zonedSchedule(
       1,
       'C.Y.N',
       '어제 근처에 일어난 일을 확인해 보세요',
-      makeDate(9,0,0), // 오전 7시 정각
+      makeDate(9,0,0),
       NotificationDetails(android: androidDetails, iOS: iosDetails),
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation:

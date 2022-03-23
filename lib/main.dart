@@ -57,7 +57,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'Nearby News',
       theme: ThemeData(
-
+        primarySwatch: Colors.yellow,
       ),
       home: Scaffold(
         body: Center(child: WebViewExample()),
@@ -66,7 +66,7 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-dynamic url;
+dynamic url = "https://www.google.co.kr/";
 
 class WebViewExample extends StatefulWidget {
   const WebViewExample({Key? key}) : super(key: key);
@@ -79,11 +79,11 @@ class WebViewExampleState extends State<WebViewExample> {
   WebViewController? _webViewController;
   final Completer<WebViewController> _completerController = Completer<WebViewController>();
 
-  updateUrl() {
-    setState(() {
-      _webViewController?.loadUrl(url);
-    });
-  }
+  //updateUrl() {
+  //  setState(() {
+  //    _webViewController?.loadUrl(url);
+  //  });
+  //}
 
   @override
   void initState() {
@@ -105,16 +105,8 @@ class WebViewExampleState extends State<WebViewExample> {
                 .then((value) => _webViewController = value);
             _completerController.complete(webViewController);
           },
-          initialUrl: "https://blog.naver.com/cieldinoegg/222611323546",
+          initialUrl: url,
           javascriptMode: JavascriptMode.unrestricted,
-        ),
-        floatingActionButton: FloatingActionButton(
-          // child: Text('Click'),
-          child: Icon(Icons.access_alarm),
-          onPressed: ()=> {
-            showNotification(),
-            updateUrl()
-          },
         ),
       ),
     );
