@@ -64,7 +64,7 @@ showNotification() async {
 
   notifications.zonedSchedule(
       1,
-      'C.Y.N',
+      'New News!',
       '어제 근처에 일어난 일을 확인해 보세요',
       makeDate(9,0,0),
       NotificationDetails(android: androidDetails, iOS: iosDetails),
