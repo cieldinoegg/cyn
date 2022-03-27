@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.cyn_project">
    <application
-        android:label="cyn_project"
+        android:label="NearbyNews"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

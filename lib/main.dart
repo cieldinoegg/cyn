@@ -66,7 +66,7 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-dynamic url = "https://www.google.co.kr/";
+dynamic url = "https://google.anhye0n.com/";
 
 class WebViewExample extends StatefulWidget {
   const WebViewExample({Key? key}) : super(key: key);
